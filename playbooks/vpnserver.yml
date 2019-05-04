@@ -24,6 +24,7 @@
   - { role: tmpfs, tags: [tmpfs] }
   - { role: tools, tags: [tools] }
   - { role: motd, tags: [motd] }
+  - { role: respondd, tags: [yanic, respondd] }
   - { role: nginx, tags: [nginx] }
   - { role: speedtest, tags: [speedtest] }
   - { role: etckeeper-post, tags: [etckeeper-post] }
