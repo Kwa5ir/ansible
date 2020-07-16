@@ -30,22 +30,30 @@
 
 - name: Install script to generate nodes zone
   copy:
-    src: zonegen.py
-    dest: /usr/local/bin/zonegen.py
+    src: "{{ item }}"
+    dest: /usr/local/bin/
     owner: root
     group: root
     mode: 0755
+  with_items:
+  - zonegen.py
+  - zonegen-all
 
-- name: Install cronjob to generate nodes zone
-  copy:
-    src: cronjob
-    dest: /etc/cron.hourly/zonegen
-    owner: root
-    group: root
-    mode: 0755
+- name: Install timer
+  import_role:
+    name: timer
+  vars:
+    timer_name: zonegen
+    timer_exec: /usr/local/bin/zonegen-all
+    timer_interval: 60min
+
+- name: Remove legacy cronjob
+  file:
+    path: /etc/cron.hourly/zonegen
+    state: absent
 
 - name: Initially generate nodes zone
-  command: /etc/cron.hourly/zonegen
+  service: name=zonegen.service state=started
 
 - name: Open firewall for DNS
   copy:
